@@ -15,6 +15,24 @@ def simple_match(target, pattern):
     # 未找到匹配，返回-1
     else:
         return -1
+"""
+    KMP无回溯串匹配算法
+"""
+def kmpMatch(target, pattern, pNext):
+    j, i = 0, 0
+    n, m = len(target), len(pattern)
+    while j < n and i < m:
+        # 匹配到字符，进行下一位的匹配
+        if i == -1 or target[j] == pattern[i]: 
+            # 模式串与目标串都前进一位
+            j, i = j + 1, i + 1
+        else:
+            # 匹配失败, 考虑pNext决定的下一个字符
+            i = pNext[i]
+    if i == m:
+        return j - i
+    else:
+        return -1
 
 target = "David json shit sse"
 pattern = "json"
