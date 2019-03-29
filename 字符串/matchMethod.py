@@ -33,8 +33,28 @@ def kmpMatch(target, pattern, pNext):
         return j - i
     else:
         return -1
+"""
+    获取pnext数组
+"""
+def gen_pNext(pattern):
+    """生成pattern表中针对各位置i的下一检查位置表"""
+    i, k , m = 0, -1, len(pattern)
+    pNext = [-1] * m
+    while i < m - 1:
+        if k == -1 or pattern[i] == pattern[k]:
+            i , k = i + 1, k + 1
+            if pattern[i] == pattern[k]:
+                pNext[i] = pNext[k]
+            else:
+                pNext[i] = k
+        else:
+            k = pNext[k]
+    return pNext
 
 target = "David json shit sse"
 pattern = "json"
 location = simple_match(target, pattern)
 print(location)
+
+location2 = kmpMatch(target, pattern, gen_pNext(pattern))
+print(location2)
