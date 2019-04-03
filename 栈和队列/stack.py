@@ -64,10 +64,4 @@ class Stack_linkedList:
     
     def top(self):
         return self.head.elem
-# 测试方法
-stack2 = Stack_linkedList()
-print(stack2.is_empty())
-stack2.push("1")
-stack2.push("2")
-print(stack2.pop())
-print(stack2.top())
+
