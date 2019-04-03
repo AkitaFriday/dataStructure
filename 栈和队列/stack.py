@@ -34,7 +34,40 @@ class Stack_lineTable(list):
         except StackUnderFlowError as se:
             se.getMessage()
 
+"""
+    用单向链表实现一个栈
+"""
+# 节点类
+class Node(object):
+    def __init__(self, elem, next_ = None):
+        self.next_ = next_
+        self.elem = elem
+# 用链表实现栈的类
+class Stack_linkedList:
+    def __init__(self):
+        self.head = None
+    
+    def is_empty(self):
+        return self.head is None
+    def push(self, elem):
+        self.head = Node(elem, self.head)
+    
+    def pop(self):
+        try:
+            if self.head is None:
+                raise StackUnderFlowError
+            p = self.head
+            self.head = p.next_
+            return p.elem
+        except StackUnderFlowError as se:
+            se.getMessage()
+    
+    def top(self):
+        return self.head.elem
 # 测试方法
-stack1 = Stack_lineTable()
-stack1.push("1")
-print(stack1.pop())
+stack2 = Stack_linkedList()
+print(stack2.is_empty())
+stack2.push("1")
+stack2.push("2")
+print(stack2.pop())
+print(stack2.top())
