@@ -12,6 +12,7 @@ priority = {
 # 表达式合集字符串
 operation = "+-*/%()"
 
+
 def tokens(line):
     """
         生成器函数，生成line中的每一项,
@@ -29,13 +30,13 @@ def tokens(line):
             lists.append(line[i])
             i += 1
             continue
-        
+
         j = i + 1
         while j < llen and (not line[j].isspace() and line[j] not in operation):
             if(line[j] == "e" or line[j] == "E") and j + 1 < llen and line[j + 1] == "-":
                 j += 1
             j += 1
-        lists.append(line[i : j])
+        lists.append(line[i: j])
         i = j
     # 偷懒， 从前往后遍历，然后来个reversed(), 还是个迭代器, 美滋滋
     return reversed(lists)
@@ -48,7 +49,7 @@ def transToPolish(line):
     exp = []
 
     for x in tokens(line):
-        # 数字直接进入后缀式列表
+        # 数字直接进入前缀式列表
         if x not in operation:
             exp.append(x)
         # 右括号进运算符号栈
@@ -78,24 +79,39 @@ def transToPolish(line):
             raise SyntaxError("*********Missing '('*********")
         # 剩下的一股脑放到表达式列表
         exp.append(operation_stack.pop())
-    
+
     return exp
 
-
 # 波兰表达式计算
+
+
 def calculatorPolish(line):
-    listPolish = line.split(" ")
     operation_stack = Stack_lineTable()
     data_stack = Stack_lineTable()
-    for i in listPolish:
-        if i not in operation:
-            data_stack.push(i)
+    # 前缀式数组倒序遍历
+    for i in line:
+        # 操作符号栈为空并且当前是数字时, 数据栈入栈
+        if i not in operation and operation_stack.is_empty():
+            data_stack.push(int(i))
             continue
         else:
             operation_stack.push(i)
-            continue
-        if data_stack.getLength() < 2:
-            raise Exception("少于两个元素")
+        # 一旦操作符号栈有元素, 就出栈进行计算
+        x = operation_stack.pop()
+        elem1 = data_stack.pop()
+        elem2 = data_stack.pop()
+        switch = {
+            "+": elem1 + elem2,
+            "-": elem1 - elem2,
+            "*": elem1 * elem2,
+            "%": elem1 % elem2,
+            "/": elem1 / elem2
+        }
+        result = switch[x]
+        # 计算的结果再次压栈进数据栈
+        data_stack.push(result)
+    print(data_stack.pop())
+
 
 
 line = "1+2-3*(4-5)"
@@ -104,3 +120,4 @@ result = []
 for i in reversed(x):
     result.append(i)
 print(" ".join(result))
+calculatorPolish(x)
