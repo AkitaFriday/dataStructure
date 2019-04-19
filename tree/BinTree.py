@@ -1,26 +1,53 @@
 """
     二叉树的实现
-    空树用None 表示
-    非空二叉树 用列表[d, l, r]表示, d 代表根节点， l , r, 分别代表左子节点与右子节点
-    Author: AkitaFriday
-    P.S 这个实现玩砸了
+    Author: weiyc
 """
-class BinTree:
-    def __init__(self, data, left=None, right=None):
-        self.tree = [data, left, right]
+from stackAndQueue.queueByLineTable import Queue
 
-def readTree(Btree):
-    i = 0
-    while i < 3:
-        if isinstance(Btree.tree[i], int):
-            print(Btree.tree[i], end=" ")
-        elif Btree.tree[i] is None:
-            print("None", end=" ")   
-        else:
-            print("\n")
-            readTree(Btree.tree[i]) 
-        i += 1
+# 二叉树节点类 , 整个结构是基于递归定义的
+# 也就是说, left 或者 right 表示的可以是一个BinTreeNode对象
+class BinTreeNode:
+    def __init__(self, dat, left=None, right=None):
+        self.data = dat
+        self.left = left
+        self.right = right
 
-btree = BinTree(1, BinTree(2), BinTree(3))
 
-readTree(btree)
+# 统计树中节点个数
+def count_BinTreeNode(tree):
+    if tree is None:
+        return 0
+    else:
+        # 递归调用计算节点个数
+        return 1 + count_BinTreeNode(tree.left) + count_BinTreeNode(tree.right)
+
+# 求二叉树节点元素数值的和
+def sum_BinTreeNode(tree):
+    if tree is None:
+        return 0
+    else:
+        return tree.data + sum_BinTreeNode(tree.left) + sum_BinTreeNode(tree.right)
+
+"""
+    二叉树的遍历
+"""
+
+# 先根序遍历, operation : 对具体节点的操作的方法名
+def preRootOrder(tree, operation):
+    if tree is None:
+        return
+    operation(tree.data)
+    preRootOrder(tree.left, operation)
+    preRootOrder(tree.right, operation)
+
+# 宽度优先遍历
+
+
+def printData(elem):
+    print(elem, end="---->")
+
+tree = BinTreeNode(1, BinTreeNode(2), BinTreeNode(3))
+preRootOrder(tree, printData)
+
+queue = Queue()
+queue.is_empty()
