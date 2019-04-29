@@ -43,12 +43,3 @@ def createHuffmanTree(objSets):
         trees.enQueue(HuffmanTreeNode(value, child1, child2))
     return trees.deQueue()
 
-
-numSets = (2, 3, 7, 10, 4, 2, 5)
-
-tree = createHuffmanTree(numSets)
-
-def operation(elem):
-    print(elem , end=" ")
-    print("--->", end=" ")
-preRootOrder(tree, operation)
