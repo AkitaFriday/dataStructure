@@ -43,7 +43,7 @@ class dictionary:
                 raise DictError("没有key")
             if value == None:
                 raise DictError("没有value")
-            self.__lists.append([key, value])
+            self.__lists.append([str(key), value])
         except DictError as de:
             de.getMessaage()
     
@@ -76,10 +76,21 @@ class dictionary:
             index_lists.append(i[0])
         return index_lists
 
-a = dictionary()
-for i in range(20):
-    a.append(i, i)
-a.append("tree", "wood")
-a['blue'] = "#D57D74"
-print(a['tree'])
-print(a['blue'])
+"""
+    二分法检索
+"""
+def bisearch(dicts, key):
+    low, high = 0, len(dicts) - 1
+    while low <= high:
+        # 获得中点位置
+        mid = low + (high - low) // 2        
+        # 找到返回
+        if key == dicts[mid][0]:
+            return dicts[mid][1]
+        # 从低半区找
+        if key < dicts[mid][0]:
+            high = mid - 1
+        # 从高半区找
+        else:
+            low = mid + 1
+    return "索引不存在"
