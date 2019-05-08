@@ -118,7 +118,7 @@ for i in range(30):
     times.append(i)
 
 # 画图比较几种排序的效率
-# 从图结果可得到的是，插入排序把两种冒泡吊起来打了
+# 从图结果可得到的是，插入排序把两种冒泡吊起来打了, 然而快排内心毫无波动，甚至赢的不开心
 fig = plt.figure(figsize=(10, 6))
 plt.plot(times, list1, c="red", label="bubble_sort")
 plt.plot(times, list2, c="blue", label="cross_bubble_sort")
