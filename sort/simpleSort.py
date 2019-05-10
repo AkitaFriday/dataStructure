@@ -97,6 +97,62 @@ def quick_sort(lst):
         qsort_req(lst, i+1, r)                          # 右半区继续递归
     # 执行快速排序划分
     qsort_req(lst, 0, len(lst) - 1)
+
+# 快速排序的另一种实现
+def quick_sort_2(lst):
+    def quick_req_2(lst, begin, end):
+        # 划分当且仅当 begin < end时进行
+        if begin >= end:
+            return
+        pivot = lst[begin].key
+        i = begin
+        for j in range(begin + 1, end + 1):
+            if lst[j].key < pivot:                        # 在枢纽元素右边发现较小的元素
+                i += 1                                    # 空位 i 向右推进,
+                lst[i], lst[j] = lst[j], lst[i]           # 小于枢纽元素的向左移动
+        lst[i], lst[begin] = lst[begin], lst[i]           # 循环结束，此时没有比枢纽元素更小的，就把枢纽元素放回序列中，并把新的begin 作为空位
+        quick_req_2(lst, begin, i - 1)
+        quick_req_2(lst, i + 1, end)
+    # 执行内部函数
+    quick_req_2(lst, 0, len(lst) - 1)
+
+"""
+    归并排序
+"""
+def merge(lfrom, lto, low, mid, high):
+    i, j, k = low, mid, low
+    while i < mid and j < high:
+        if lfrom[i].key <= lfrom[j].key:
+            lto[k] = lfrom[i]
+            i += 1
+        else:
+            lto[k] = lfrom[j]
+            j += 1
+        k += 1
+    while j < high:
+        lto[k]  = lfrom[j]
+        j += 1
+        k += 1
+def merge_pass(lfrom, lto, llen, slen):
+    i = 0
+    while i + 2 * slen < llen:
+        merge(lfrom, lto, i, i + slen, i + 2 * slen)
+        i += 2 * slen
+    if i + slen < llen:
+        merge(lfrom, lto, i, i + slen, llen)
+    else:
+        for j in range(i, llen):
+            lto[j] = lfrom[j]
+
+def merge_sort(lst):
+    slen, llen = 1, len(lst)
+    templst = [None] * llen
+    while slen < llen:
+        merge_pass(lst, templst, llen, slen)
+        slen *= 2
+        merge_pass(templst, lst, llen, slen)
+        slen *= 2
+
 # 方法执行时间计算函数
 def runTimeCal(function1):
     START = time.time()
@@ -104,27 +160,34 @@ def runTimeCal(function1):
     END = time.time()
     return END - START
 
-list1 = []
-list2 = []
-list3 = []
-list4 = []
-times = []
+# 对几种算法进行绘图
+def draw():
+    list1 = []
+    list2 = []
+    list3 = []
+    list4 = []
+    list5 = []
+    times = []
 
-for i in range(30):
-    list1.append(runTimeCal(bubble_sort))
-    list2.append(runTimeCal(cross_bubble_sort))
-    list3.append(runTimeCal(insert_sort))
-    list4.append(runTimeCal(quick_sort))
-    times.append(i)
+    for i in range(100):
+        list1.append(runTimeCal(bubble_sort))
+        list2.append(runTimeCal(cross_bubble_sort))
+        list3.append(runTimeCal(insert_sort))
+        list4.append(runTimeCal(quick_sort))
+        list5.append(runTimeCal(quick_sort_2))
+        times.append(i)
 
-# 画图比较几种排序的效率
-# 从图结果可得到的是，插入排序把两种冒泡吊起来打了, 然而快排内心毫无波动，甚至赢的不开心
-fig = plt.figure(figsize=(10, 6))
-plt.plot(times, list1, c="red", label="bubble_sort")
-plt.plot(times, list2, c="blue", label="cross_bubble_sort")
-plt.plot(times, list3, c="yellow", label="insert_sort")
-plt.plot(times, list4, c="black", label="quick_sort")
-plt.legend(loc="upper left")
-plt.xlabel("test times")
-plt.ylabel("per operation time")
-plt.show()
+    # 画图比较几种排序的效率
+    # 从图结果可得到的是，插入排序把两种冒泡吊起来打了, 然而快排内心毫无波动，甚至赢的不开心
+    fig = plt.figure(figsize=(10, 6))
+    plt.plot(times, list1, c="red", label="bubble_sort")
+    plt.plot(times, list2, c="blue", label="cross_bubble_sort")
+    plt.plot(times, list3, c="yellow", label="insert_sort")
+    plt.plot(times, list4, c="black", label="quick_sort")
+    plt.plot(times, list5, c="green", label="quick_sort_2")
+    plt.legend(loc="upper left")
+    plt.xlabel("test times")
+    plt.ylabel("per operation time")
+    plt.show()
+
+draw()
