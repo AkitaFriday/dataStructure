@@ -153,6 +153,29 @@ def merge_sort(lst):
         merge_pass(templst, lst, llen, slen)
         slen *= 2
 
+"""
+    桶排序(
+        应用前提：关键码只有很少几个值
+    )
+    思路:
+        1. 为每个关键码设定一个桶，(就是一个可扩充的连续表或者链表)
+        2. 排序时顺序地把记录放到对应关键码的桶中
+        3. 最后顺序地从桶中取出记录，就是拍好序的序列
+"""
+def radix_sort(lst, d):
+    rlists = [[] for i in range(10)]
+    llen = len(rlists)
+    for m in range(-1, -d - 1, -1):
+        for j in range(llen):
+            rlists[lst[j].key[m]].append(lst[j])
+        j = 0
+        for i in range(10):
+            tmp = rlists[i]
+            for k in range(len(tmp)):
+                lst[j] = tmp[k]
+                j += 1
+            rlists[i].clear()
+
 # 方法执行时间计算函数
 def runTimeCal(function1):
     START = time.time()
